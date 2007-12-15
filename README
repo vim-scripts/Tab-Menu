@@ -1,0 +1,7 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2096
+
+This plugin adds a menu with the list of all the tabs in GVIM. Clicking on a file name in the menu takes to the corresponding tab. This would be very useful when working with many files in different tabs. This would simulate the tab behaviour in other editors. 
+
+
+Known Problems:
+Immediately after opening a new tab, the tab list will not reflect with the actual tab details. Once you move to another tab, the tab list would be refreshed. 
