@@ -6,12 +6,22 @@ au TabEnter * call ShowTab()
 function! ShowTab()
   silent! aunmenu T&ab
   let in = 1
+  let commands = []
   for i in range(tabpagenr('$'))
-    let xyz = in + 10
-    let name = 'an 120.'. xyz . ' T&ab.&' . in . '\.\ ' . Krishna(TabLabel(in)) . ' :tabnext ' . in . '<CR>' 
+    let commands += [' T&ab.&' . Krishna(in) . ' :tabnext ' . in . '<CR>']
     let in = in + 1
-    exe name
   endfor
+  let sortedCommands = sort(commands, "KrishnaCompare")
+  let in = 10
+  for i in commands
+	let name = 'an 120.' . in . ' ' . i
+	let in = in + 1
+	exe name
+  endfor
+endfunction
+
+function! KrishnaCompare(i1, i2)
+	return a:i1 ==? a:i2 ? 0 : a:i1 >? a:i2 ? 1 : -1
 endfunction
 
 function! TabLabel(n)
@@ -40,8 +50,8 @@ func! BKrishna(fname)
   return name
 endfunc
 
-func! Krishna(fname)
-  let name = a:fname
+func! Krishna(index)
+  let name = TabLabel(a:index)
   if name == ''
     if !exists("g:menutrans_no_file")
       let g:menutrans_no_file = "[No file]"
@@ -53,7 +63,7 @@ func! Krishna(fname)
   " detach file name and separate it out:
   let name2 = fnamemodify(name, ':t')
   let name1 = BKrishna(fnamemodify(name,':h'))
-  let name = name2 . "\t" . name1
+  let name = name2 . " (" . a:index . ")\t" . name1
   let name = escape(name, "\\. \t|")
   let name = substitute(name, "&", "&&", "g")
   let name = substitute(name, "\n", "^@", "g")
